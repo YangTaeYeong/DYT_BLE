@@ -10,7 +10,7 @@ import android.content.Intent;
         import android.view.*;
 
 public class IntroActivity extends Activity {
-//
+
     Handler h;//핸들러 선언
 
     @Override
