@@ -3,24 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".IntroActivity" >
+    tools:context="com.example.bluetooth.lowEnergy.IntroActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        android:text="DONGYANG\n TELECOM"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/dongyang_logo"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
+        android:src="@drawable/logo"
+        android:id="@+id/img_logo"
+        android:layout_centerInParent="true"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/anim"
+        android:id="@+id/img_intro_loading"
+        android:layout_below="@id/img_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="63dp" />
+        />
 
 </RelativeLayout>

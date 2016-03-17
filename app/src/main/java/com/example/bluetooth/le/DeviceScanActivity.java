@@ -18,32 +18,34 @@ package com.example.bluetooth.le;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
@@ -53,9 +55,11 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     private ListView m_ListView;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
+    private boolean s_scan = true;
     private Handler mHandler;
     private AnimationDrawable frameAnimation;
-    private ImageView view;
+    private ImageView img_loading;
+
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -65,7 +69,16 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_activity);
-        getActionBar().setTitle(R.string.title_devices);
+        ActionBar actionBar = getActionBar();
+        actionBar.setTitle(R.string.title_devices);
+        // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
+        actionBar.setDisplayShowCustomEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
+        //actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
+        //actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
+        View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
+        actionBar.setCustomView(mCustomView);
+
         mHandler = new Handler();
         m_ListView = (ListView)findViewById(R.id.listView);
         m_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,19 +97,33 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
             }
         });
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xFF36c8a7));
+        mLeDeviceListAdapter = new LeDeviceListAdapter();
+        m_ListView.setAdapter(mLeDeviceListAdapter);
 
-/*
-        view = (ImageView) findViewById(R.id.productImage);
+
+        ///액션바 사이즈 구하는 부분
+        LinearLayout layout = new LinearLayout(this);
+        layout.post(new Runnable() {
+            @Override
+            public void run() {
+                getStatusBarSize();
+            }
+        });
+        /////..............
+
+
+
+
+
+        img_loading = (ImageView) findViewById(R.id.img_loading);
 
         // animation_list.xml 를 ImageView 백그라운드에 셋팅한다
-        view.setBackgroundResource(R.drawable.anim);
+        img_loading.setBackgroundResource(R.drawable.anim);
 
         // 이미지를 동작시키기위해  AnimationDrawable 객체를 가져온다.
-        frameAnimation = (AnimationDrawable) view.getBackground();
+        frameAnimation = (AnimationDrawable) img_loading.getBackground();
 
-*/
+
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -122,29 +149,71 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         if (!mScanning) {
-            menu.findItem(R.id.menu_stop).setVisible(false);
+            //menu.findItem(R.id.menu_stop).setVisible(false);
             menu.findItem(R.id.menu_scan).setVisible(true);
-            menu.findItem(R.id.menu_refresh).setActionView(null);
+            //menu.findItem(R.id.menu_scan).setTitle("Scan");
+            menu.findItem(R.id.menu_scan).setIcon(R.drawable.scan_bt);
+
+            //menu.findItem(R.id.menu_refresh).setActionView(null);
+            //frameAnimation.stop();
+            img_loading.setImageResource(R.drawable.white);
         } else {
-            menu.findItem(R.id.menu_stop).setVisible(true);
-            menu.findItem(R.id.menu_scan).setVisible(false);
+            //menu.findItem(R.id.menu_stop).setVisible(true);
+            menu.findItem(R.id.menu_scan).setVisible(true);
+            //menu.findItem(R.id.menu_scan).setTitle("Stop");
+            menu.findItem(R.id.menu_scan).setIcon(R.drawable.scan_stop);
+            /*
             menu.findItem(R.id.menu_refresh).setActionView(
                     R.layout.actionbar_indeterminate_progress);
+                    */
+            img_loading.setImageResource(R.drawable.anim);
+            //frameAnimation.start();
         }
         return true;
     }
 
+
+    //액션바 크기 구하는 메소드
+    private void getStatusBarSize() {
+        Rect rectgle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
+        int StatusBarHeight = rectgle.top;
+        int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        int TitleBarHeight = contentViewTop - StatusBarHeight;
+
+        Log.i("getHeight", "StatusBar Height= " + StatusBarHeight + " TitleBar Height = " + TitleBarHeight);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        /*
         switch (item.getItemId()) {
             case R.id.menu_scan:
                 mLeDeviceListAdapter.clear();
                 scanLeDevice(true);
                 break;
-            case R.id.menu_stop:
+            case R.id.menu_scan:
                 scanLeDevice(false);
                 break;
         }
+        */
+        if(item.getItemId() == R.id.menu_scan){
+            if(s_scan){
+                mLeDeviceListAdapter.clear();
+                mLeDeviceListAdapter.notifyDataSetChanged();
+                mHandler.removeCallbacksAndMessages(null);
+                scanLeDevice(true);
+                s_scan = false;
+            }
+            else{
+                scanLeDevice(false);
+                s_scan = true;
+            }
+
+        }
+
         return true;
     }
 
@@ -162,11 +231,10 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         }
 
         // Initializes list view adapter.
-
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
-        m_ListView.setAdapter(mLeDeviceListAdapter);
+        s_scan = true;
+        mLeDeviceListAdapter.notifyDataSetChanged();
         //setListAdapter(mLeDeviceListAdapter);
-        scanLeDevice(true);
+        //scanLeDevice(true);
     }
 
     @Override

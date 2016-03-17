@@ -16,6 +16,7 @@
 
 package com.example.bluetooth.le;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -28,7 +29,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Handler;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,20 +36,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bluetooth.le.R;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.Arrays;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect,
@@ -295,8 +291,12 @@ public class DeviceControlActivity extends Activity {
 		mButtonRMC.setOnClickListener(mButtonRMCClickListener);
 		mButtonRefresh.setOnClickListener(mButtonRefreshClickListener);
 
-		getActionBar().setTitle(mDeviceName);
+		ActionBar actionBar = getActionBar();
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		getActionBar().setTitle(mDeviceName);
+
+
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 	}

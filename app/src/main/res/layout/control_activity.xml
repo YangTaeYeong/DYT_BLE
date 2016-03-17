@@ -5,9 +5,9 @@
     android:orientation="vertical" >
 
 
-<!-- 
+<!--
 Device Adrress와 connection status 표시 지움
-   
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@ Device Adrress와 connection status 표시 지움
             android:text="@string/disconnected"
             android:textSize="18sp" />
     </LinearLayout>
-    
+
 -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,96 +66,95 @@ Device Adrress와 connection status 표시 지움
         android:text="@string/no_data"
         android:textColor="#ff7F007F"
         android:textSize="16sp" />
- 
+
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-        
+
     <Button
         android:id="@+id/button1EDFA1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="EDFA 1" />
 
     <Button
         android:id="@+id/button2EDFA2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="EDFA 2" />
 
     <Button
         android:id="@+id/button3ONU"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="ONU" />
 
     </LinearLayout>
-        
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-        
+
     <Button
         android:id="@+id/button4FTX"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="FTX" />
 
     <Button
         android:id="@+id/button5REPEAT1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="REPEATER" />
 
     <Button
         android:id="@+id/button6RMC"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="RMC" />
     </LinearLayout>
- 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:layout_margin="5dp"
         android:orientation="vertical" >
-  
+
         <TextView
             android:id="@+id/data_rx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_data_rx"
-            android:textColor="#ff0000ff"
+            android:textColor="#000000"
             android:textSize="18sp" />
 
         <Space
             android:layout_width="5dp"
             android:layout_height="wrap_content" />
 
-        <ScrollView 
+        <ScrollView
             android:id="@+id/dbgMsg_scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:background="#000000">
          <TextView
             android:id="@+id/data_value_rx"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_data"
-            android:background="#ff00b0b0"
-            android:textColor="#ffffffff"
+            android:textColor="#ffffff"
             android:textSize="18sp" />
-         
+
         </ScrollView>
 
      </LinearLayout>
@@ -171,13 +170,12 @@ Device Adrress와 connection status 표시 지움
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:layout_weight="1"
-	        android:background="#ff80b0b0"
 	        android:text="Refresh" />
      </LinearLayout>
-        
-<!-- 
+
+<!--
 data Tx 항목 지움.
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
