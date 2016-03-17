@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bluetooth.le"
+    package="com.dyt.bluetooth.le"
     android:versionCode="1"
     android:versionName="1.6.2">
 
@@ -22,21 +22,21 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/CustomActionBarTheme">
         <activity
-            android:name="com.example.bluetooth.le.DeviceScanActivity"
+            android:name="com.dyt.bluetooth.le.DeviceScanActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="com.example.bluetooth.le.DeviceControlActivity"
+            android:name="com.dyt.bluetooth.le.DeviceControlActivity"
             android:screenOrientation="portrait"></activity>
 
         <service
-            android:name="com.example.bluetooth.le.BluetoothLeService"
+            android:name="com.dyt.bluetooth.le.BluetoothLeService"
             android:enabled="true" />
 
         <activity
-            android:name="com.example.bluetooth.le.IntroActivity"
+            android:name="com.dyt.bluetooth.le.IntroActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar">
 

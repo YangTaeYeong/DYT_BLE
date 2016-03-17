@@ -1,4 +1,4 @@
-package com.example.bluetooth.le;
+package com.dyt.bluetooth.le;
 
 import android.content.Intent;
 
@@ -7,8 +7,6 @@ import android.content.Intent;
         import android.os.*;
         import android.app.Activity;
 import android.view.*;
-
-import com.example.bluetooth.le.R;
 
 public class IntroActivity extends Activity {
 

@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.bluetooth.le;
+package com.dyt.bluetooth.le;
 
 public final class R {
     public static final class attr {

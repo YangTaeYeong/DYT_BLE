@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.bluetooth.le;
+package com.dyt.bluetooth.le;
 
 import android.app.ActionBar;
 import android.app.Activity;

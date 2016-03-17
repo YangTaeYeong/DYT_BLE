@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.bluetooth.le;
+package com.dyt.bluetooth.le;
 
 import java.util.HashMap;
 import java.util.UUID;

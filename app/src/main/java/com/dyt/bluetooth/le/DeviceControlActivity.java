@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.bluetooth.le;
+package com.dyt.bluetooth.le;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -38,8 +38,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.bluetooth.le.R;
 
 import java.util.ArrayList;
 import java.util.List;
