@@ -73,9 +73,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         actionBar.setTitle(R.string.title_devices);
         // Custom Actionbar를 사용하기 위해 CustomEnabled을 true 시키고 필요 없는 것은 false 시킨다
         actionBar.setDisplayShowCustomEnabled(true);
-        //actionBar.setDisplayHomeAsUpEnabled(false);			//액션바 아이콘을 업 네비게이션 형태로 표시합니다.
-        //actionBar.setDisplayShowTitleEnabled(false);		//액션바에 표시되는 제목의 표시유무를 설정합니다.
-        //actionBar.setDisplayShowHomeEnabled(false);			//홈 아이콘을 숨김처리합니다.
         View mCustomView = LayoutInflater.from(this).inflate(R.layout.layout_actionbar, null);
         actionBar.setCustomView(mCustomView);
 
@@ -100,7 +97,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mLeDeviceListAdapter = new LeDeviceListAdapter();
         m_ListView.setAdapter(mLeDeviceListAdapter);
 
-
         ///액션바 사이즈 구하는 부분
         LinearLayout layout = new LinearLayout(this);
         layout.post(new Runnable() {
@@ -111,26 +107,17 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         });
         /////..............
 
-
-
-
-
         img_loading = (ImageView) findViewById(R.id.img_loading);
-
         // animation_list.xml 를 ImageView 백그라운드에 셋팅한다
         img_loading.setBackgroundResource(R.drawable.anim);
-
         // 이미지를 동작시키기위해  AnimationDrawable 객체를 가져온다.
         frameAnimation = (AnimationDrawable) img_loading.getBackground();
-
-
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
-
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager =
@@ -149,25 +136,13 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         if (!mScanning) {
-            //menu.findItem(R.id.menu_stop).setVisible(false);
             menu.findItem(R.id.menu_scan).setVisible(true);
-            //menu.findItem(R.id.menu_scan).setTitle("Scan");
             menu.findItem(R.id.menu_scan).setIcon(R.drawable.scan_bt);
-
-            //menu.findItem(R.id.menu_refresh).setActionView(null);
-            //frameAnimation.stop();
             img_loading.setImageResource(R.drawable.white);
         } else {
-            //menu.findItem(R.id.menu_stop).setVisible(true);
             menu.findItem(R.id.menu_scan).setVisible(true);
-            //menu.findItem(R.id.menu_scan).setTitle("Stop");
             menu.findItem(R.id.menu_scan).setIcon(R.drawable.scan_stop);
-            /*
-            menu.findItem(R.id.menu_refresh).setActionView(
-                    R.layout.actionbar_indeterminate_progress);
-                    */
             img_loading.setImageResource(R.drawable.anim);
-            //frameAnimation.start();
         }
         return true;
     }
@@ -188,17 +163,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        /*
-        switch (item.getItemId()) {
-            case R.id.menu_scan:
-                mLeDeviceListAdapter.clear();
-                scanLeDevice(true);
-                break;
-            case R.id.menu_scan:
-                scanLeDevice(false);
-                break;
-        }
-        */
         if(item.getItemId() == R.id.menu_scan){
             if(s_scan){
                 mLeDeviceListAdapter.clear();
@@ -233,8 +197,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         // Initializes list view adapter.
         s_scan = true;
         mLeDeviceListAdapter.notifyDataSetChanged();
-        //setListAdapter(mLeDeviceListAdapter);
-        //scanLeDevice(true);
     }
 
     @Override
@@ -254,22 +216,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mLeDeviceListAdapter.clear();
     }
 
-
-    /*
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
-        if (device == null) return;
-        final Intent intent = new Intent(this, DeviceControlActivity.class);
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
-        if (mScanning) {
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            mScanning = false;
-        }
-        startActivity(intent);
-    }
-*/
     private void scanLeDevice(final boolean enable) {
         if (enable) {
             // Stops scanning after a pre-defined scan period.
@@ -364,14 +310,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
                 viewHolder.deviceName.setText(deviceName);
             else
                 viewHolder.deviceName.setText(R.string.unknown_device);
-
-            // animation_list.xml 를 ImageView 백그라운드에 셋팅한다
-            //view.setBackgroundResource(R.drawable.anim);
-            //view.setBackgroundColor(Color.BLACK);
-
             // 이미지를 동작시키기위해  AnimationDrawable 객체를 가져온다.
-            //frameAnimation = (AnimationDrawable) view.getBackground();
-            //frameAnimation.start();
             viewHolder.deviceAddress.setText(device.getAddress());
 
             viewHolder.deviceRssi.setText(String.valueOf(info.rssi)+"dBm");
