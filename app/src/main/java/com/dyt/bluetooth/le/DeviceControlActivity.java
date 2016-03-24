@@ -33,17 +33,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -52,7 +50,7 @@ import java.util.UUID;
  * device. The Activity communicates with {@code BluetoothLeService}, which in
  * turn interacts with the Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends Activity{
     private final static String TAG = BluetoothLeService.class.getName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -96,26 +94,12 @@ public class DeviceControlActivity extends Activity {
 
     public static final int UPTIME_ENABLE = 0x0000;
     public static final int UPTIME_DISABLE = 0x00FF;
-
     private int mod_Block_stat;
     private int asciitobin;
-
     private int uptimedisplay;
-
-    // private int mod_edfa1_stat = 0;
-    // private int mod_edfa2_stat = 0;
-    // // private int mod_edfa3_stat = 0;
-    // private int mod_onu_stat = 0;
-    // private int mod_otx_stat = 0;
-    // private int mod_repeat1_stat = 0;
-    // private int mod_repeat2_stat = 0;
-    // private int mod_rf_amp_stat = 0;
-    // private int mod_rmc_stat = 0;
-
     private byte[] Value_Module_all = new byte[128];
     private byte[] Value_fixed = new byte[64];
     private byte[] Value_status = new byte[64];
-    ;
 
     private TextView mConnectionState;
     private TextView mDataFieldRx;
@@ -215,35 +199,6 @@ public class DeviceControlActivity extends Activity {
         }
     };
 
-    /*
-     * // If a given GATT characteristic is selected, check for supported
-     * features. This sample // demonstrates 'Read' and 'Notify' features. See
-     * // http://d.android.com/reference/android/bluetooth/BluetoothGatt.html
-     * for the complete // list of supported characteristic features. private
-     * final ExpandableListView.OnChildClickListener servicesListClickListner =
-     * new ExpandableListView.OnChildClickListener() {
-     *
-     * @Override public boolean onChildClick(ExpandableListView parent, View v,
-     * int groupPosition, int childPosition, long id) { if (mGattCharacteristics
-     * != null) { final BluetoothGattCharacteristic characteristic =
-     * mGattCharacteristics.get(groupPosition).get(childPosition); final int
-     * charaProp = characteristic.getProperties(); // if ((charaProp |
-     * BluetoothGattCharacteristic.PROPERTY_READ) > 0) { // // If there is an
-     * active notification on a characteristic, clear // // it first so it
-     * doesn't update the data field on the user interface. // if
-     * (mNotifyCharacteristic != null) { //
-     * mBluetoothLeService.setCharacteristicNotification( //
-     * mNotifyCharacteristic, false); // mNotifyCharacteristic = null; // } //
-     * mBluetoothLeService.readCharacteristic(characteristic); // } if
-     * ((charaProp == BluetoothGattCharacteristic.PROPERTY_NOTIFY)) { Log.d(TAG,
-     * "Checked Notify"); mNotifyCharacteristic = characteristic;
-     * mBluetoothLeService.setCharacteristicNotification( mNotifyCharacteristic,
-     * true); } if ((charaProp == BluetoothGattCharacteristic.PROPERTY_WRITE) )
-     * { Log.d(TAG, "Checked Write"); mWriteCharacteristic = characteristic;
-     * mWriteCharacteristic.setValue("TestMessage");
-     * mBluetoothLeService.writeCharacteristic(mWriteCharacteristic); } return
-     * true; } return false; } };
-     */
     private void clearUI() {
         // mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
         mDataFieldRx.setText(R.string.no_data);
@@ -254,18 +209,19 @@ public class DeviceControlActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.control_activity);
 
+
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
 
         //타이머 설정
-        timer = new CountDownTimer(100 * 1000, 3000) {
+        timer = new CountDownTimer(Integer.MAX_VALUE, 5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 value++;
                 sendtomoduleCMD();
-                Toast.makeText(DeviceControlActivity.this, "sendtomoduleCMD" + value, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DeviceControlActivity.this, "sendtomoduleCMD" + value, Toast.LENGTH_SHORT).show();
 
                 //if (value == 5) timer.cancel();
             }
@@ -277,20 +233,10 @@ public class DeviceControlActivity extends Activity {
 
         //타이머 시작
         timer.start();
-        // Sets up UI references.
-        // [ims] device addr 표시 지움. ((TextView)
-        // findViewById(R.id.device_address)).setText(mDeviceAddress);
-        // mGattServicesList = (ExpandableListView)
-        // findViewById(R.id.gatt_services_list);
-        // mGattServicesList.setOnChildClickListener(servicesListClickListner);
-        // [ims] status 표시 지움. mConnectionState = (TextView)
-        // findViewById(R.id.connection_state);
+
         mDataFieldRx = (TextView) findViewById(R.id.data_value_rx);
-        // //// mDataFieldRx.setMovementMethod(new ScrollingMovementMethod());
+
         mtv_ModName = (TextView) findViewById(R.id.data_rx);
-        // [ims] Tx 입력 지움 mDataFieldTx = (EditText)
-        // findViewById(R.id.data_value_tx);
-        // [ims] Tx 입력 지움 mDataSend = (Button) findViewById(R.id.button_tx);
 
         mdevice_addr = (TextView) findViewById(R.id.device_addr);
 
@@ -302,7 +248,7 @@ public class DeviceControlActivity extends Activity {
         mButtonFTX = (Button) findViewById(R.id.button4FTX);
         mButtonREPEAT1 = (Button) findViewById(R.id.button5REPEAT1);
         mButtonRMC = (Button) findViewById(R.id.button6RMC);
-        mButtonRefresh = (Button) findViewById(R.id.buttonRefresh);
+
 
         // [ims]지움 mDataSend.setOnClickListener(mDataSendClickListener);
         mButtonEDFA1.setOnClickListener(mButtonEDFA1ClickListener);
@@ -311,7 +257,7 @@ public class DeviceControlActivity extends Activity {
         mButtonFTX.setOnClickListener(mButtonFTXClickListener);
         mButtonREPEAT1.setOnClickListener(mButtonREPEAT1ClickListener);
         mButtonRMC.setOnClickListener(mButtonRMCClickListener);
-        mButtonRefresh.setOnClickListener(mButtonRefreshClickListener);
+
 
         ActionBar actionBar = getActionBar();
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -349,7 +295,8 @@ public class DeviceControlActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.gatt_services, menu);
+        getMenuInflater().inflate(R.menu.menu_control, menu);
+
         if (mConnected) {
             menu.findItem(R.id.menu_connect).setVisible(false);
             menu.findItem(R.id.menu_disconnect).setVisible(true);
@@ -359,6 +306,7 @@ public class DeviceControlActivity extends Activity {
         }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -371,7 +319,15 @@ public class DeviceControlActivity extends Activity {
                 return true;
             case android.R.id.home:
                 onBackPressed();
+                timer.cancel();
                 return true;
+            case R.id.menu_refresh:
+                sendtomoduleCMD();
+                return true;
+            case R.id.version:
+                Toast.makeText(this, "version", Toast.LENGTH_SHORT).show();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -380,9 +336,6 @@ public class DeviceControlActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                // if(mConnectionState != null) {
-                // mConnectionState.setText(resourceId);
                 if (mtv_ModName != null) {
                     mtv_ModName.setText(resourceId);
                 }
@@ -390,58 +343,6 @@ public class DeviceControlActivity extends Activity {
         });
     }
 
-    /*
-     * private void displayData(String data) { if (data != null) {
-     * mDataFieldRx.setText(data); } }
-     *
-     * // Demonstrates how to iterate through the supported GATT
-     * Services/Characteristics. // In this sample, we populate the data
-     * structure that is bound to the ExpandableListView // on the UI. private
-     * void displayGattServices(List<BluetoothGattService> gattServices) { if
-     * (gattServices == null) return; String uuid = null; String
-     * unknownServiceString =
-     * getResources().getString(R.string.unknown_service); String
-     * unknownCharaString =
-     * getResources().getString(R.string.unknown_characteristic);
-     * ArrayList<HashMap<String, String>> gattServiceData = new
-     * ArrayList<HashMap<String, String>>(); ArrayList<ArrayList<HashMap<String,
-     * String>>> gattCharacteristicData = new
-     * ArrayList<ArrayList<HashMap<String, String>>>(); mGattCharacteristics =
-     * new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
-     *
-     * // Loops through available GATT Services. for (BluetoothGattService
-     * gattService : gattServices) { HashMap<String, String> currentServiceData
-     * = new HashMap<String, String>(); uuid = gattService.getUuid().toString();
-     * currentServiceData.put( LIST_NAME, SampleGattAttributes.lookup(uuid,
-     * unknownServiceString)); currentServiceData.put(LIST_UUID, uuid);
-     * gattServiceData.add(currentServiceData);
-     *
-     * ArrayList<HashMap<String, String>> gattCharacteristicGroupData = new
-     * ArrayList<HashMap<String, String>>(); List<BluetoothGattCharacteristic>
-     * gattCharacteristics = gattService.getCharacteristics();
-     * ArrayList<BluetoothGattCharacteristic> charas = new
-     * ArrayList<BluetoothGattCharacteristic>();
-     *
-     * // Loops through available Characteristics. for
-     * (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-     * charas.add(gattCharacteristic); HashMap<String, String> currentCharaData
-     * = new HashMap<String, String>(); uuid =
-     * gattCharacteristic.getUuid().toString(); currentCharaData.put( LIST_NAME,
-     * SampleGattAttributes.lookup(uuid, unknownCharaString));
-     * currentCharaData.put(LIST_UUID, uuid);
-     * gattCharacteristicGroupData.add(currentCharaData); }
-     * mGattCharacteristics.add(charas);
-     * gattCharacteristicData.add(gattCharacteristicGroupData); }
-     *
-     * SimpleExpandableListAdapter gattServiceAdapter = new
-     * SimpleExpandableListAdapter( this, gattServiceData,
-     * android.R.layout.simple_expandable_list_item_2, new String[] {LIST_NAME,
-     * LIST_UUID}, new int[] { android.R.id.text1, android.R.id.text2 },
-     * gattCharacteristicData, android.R.layout.simple_expandable_list_item_2,
-     * new String[] {LIST_NAME, LIST_UUID}, new int[] { android.R.id.text1,
-     * android.R.id.text2 } ); mGattServicesList.setAdapter(gattServiceAdapter);
-     * }
-     */
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
@@ -536,25 +437,6 @@ public class DeviceControlActivity extends Activity {
         }
     }
 
-/*
-    private boolean moduledata_RecieveCheck(byte[] data) {
-		int ptr;
-
-		if(data[0] != 0x11)	return false;
-		
-		mod_Block_stat += (STAT_FIX_BLOCK1 << data[2]);
-		ptr = 16 * data[2];
-		for (int i = 0; i < 16; i++) {
-			Value_Module_all[ptr++] = data[3 + i];
-		}
-		if (mod_Block_stat == STAT_ALL_BLOCK) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-*/
-
     private void modDisplay_EDFA1(byte[] data) {
         int tmp;
         int tmp2;
@@ -563,7 +445,7 @@ public class DeviceControlActivity extends Activity {
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("EDFA1 Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("\n< Alarm List >\n"));
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
@@ -576,15 +458,9 @@ public class DeviceControlActivity extends Activity {
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
                 stringBuilder.append(String.format("LD1 Temperature\n"));
             }
-            //if ((tmp & (0x0001 << 3)) == (0x0001 << 3)) {
-            //	stringBuilder.append(String.format("LD1_Pump LD Bias\n"));
-            //}
             if ((tmp & (0x0001 << 4)) == (0x0001 << 4)) {
                 stringBuilder.append(String.format("LD2 Temperature\n"));
             }
-            //if ((tmp & (0x0001 << 5)) == (0x0001 << 5)) {
-            //	stringBuilder.append(String.format("LD2__Pump LD Bias\n"));
-            //}
             if ((tmp & (0x0001 << 6)) == (0x0001 << 6)) {
                 stringBuilder.append(String.format("Board Temperature\n"));
             }
@@ -754,7 +630,6 @@ public class DeviceControlActivity extends Activity {
 
         }
         mDataFieldRx.setText(stringBuilder.toString());
-
     }
 
     private void modDisplay_EDFA2(byte[] data) {
@@ -950,7 +825,6 @@ public class DeviceControlActivity extends Activity {
 
         }
         mDataFieldRx.setText(stringBuilder.toString());
-
     }
 
     private void modDisplay_EDFA3(byte[] data) {
@@ -1770,73 +1644,6 @@ public class DeviceControlActivity extends Activity {
                 decodemodule(data);
             }
         }
-        // mDataFieldRx.setText(new String(data));
-
-		/*
-		 * byte -> hex
-		 */
-		/*
-		 * final StringBuilder stringBuilder = new StringBuilder(1024);
-		 * //data.length);
-		 * stringBuilder.append(String.format("Module Name  : EDFA 1\n"));
-		 * 
-		 * stringBuilder.append(String.format("\n< Alarm List >\n"));
-		 * stringBuilder.append(String.format("Optical Input\n"));
-		 * stringBuilder.append(String.format("Optical Output\n"));
-		 * stringBuilder.append(String.format("LD1_Temperature\n"));
-		 * stringBuilder.append(String.format("LD1_Pump LD Bias\n"));
-		 * stringBuilder.append(String.format("LD2_Temperature\n"));
-		 * stringBuilder.append(String.format("LD2__Pump LD Bias\n"));
-		 * stringBuilder.append(String.format("Board Temperature\n"));
-		 * 
-		 * stringBuilder.append(String.format("\n< Status >\n"));
-		 * 
-		 * stringBuilder.append(String.format("Optical Input Power   :: 4.9 dBm\n"
-		 * ));
-		 * stringBuilder.append(String.format("Laser Key Switch Status   :: ON\n"
-		 * )); stringBuilder.append(String.format("Laser  Switch   :: ON\n"));
-		 * stringBuilder.append(String.format("LD Status   :: LD ON\n"));
-		 * stringBuilder
-		 * .append(String.format("Optical Output Power   :: 26.3 dBm\n"));
-		 * stringBuilder
-		 * .append(String.format("LD Bias Current   :: 811.0 mA, 842.0 mA\n"));
-		 * stringBuilder
-		 * .append(String.format("LD Temperature   :: 24.3 `C, 24.3 `C\n"));
-		 * stringBuilder
-		 * .append(String.format("Module Temperature   :: 51.2 `C\n"));
-		 * 
-		 * stringBuilder.append(String.format("\nInput Alarm   :: Enable\n"));
-		 * stringBuilder.append(String.format("Output Alarm   :: Enable\n"));
-		 * stringBuilder
-		 * .append(String.format("LD Temperature Alarm   :: Enable\n"));
-		 * stringBuilder
-		 * .append(String.format("LD Bias Current Alarm   :: Enable\n"));
-		 * stringBuilder
-		 * .append(String.format("Board Temperature Alarm   :: Enable\n"));
-		 * 
-		 * stringBuilder.append(String.format(
-		 * "\nInput Power Alarm Threshold MIN/MAX   :: -2.0 dBm / 12.0 dBm\n"));
-		 * stringBuilder.append(String.format(
-		 * "Output Power Alarm Threshold MIN/MAX   :: 24.0 dBm  / 28.5 dBm\n"));
-		 * 
-		 * stringBuilder.append(String.format("\n< Reference value >\n"));
-		 * stringBuilder
-		 * .append(String.format("Output Power Reference   :: 26.3 dBm\n"));
-		 * stringBuilder.append(String.format(
-		 * "LD Bias Current Reference   :: 811.0 mA, 838.0 mA\n"));
-		 * stringBuilder
-		 * .append(String.format("LD Temperature  Reference   :: 24.3 `C, 24.3 `C\n"
-		 * ));
-		 * 
-		 * stringBuilder.append(String.format("\n<Module Information>\n"));
-		 * stringBuilder.append(String.format("Software Version   :: 1.4\n"));
-		 * stringBuilder.append(String.format("Serial Number   :: A1402004\n"));
-		 * stringBuilder.append(String.format("HW_version is   :: 1A.1\n"));
-		 * stringBuilder.append(String.format("Model Name   :: HON-OFA26\n"));
-		 * //for(byte byteChar : data) //
-		 * stringBuilder.append(String.format("0x%02X ", byteChar));
-		 * mDataFieldRx.setText(stringBuilder.toString()); }
-		 */
     }
 
     // jw 데이터 송신
@@ -1873,8 +1680,6 @@ public class DeviceControlActivity extends Activity {
             txData[4] = SendChecksum(txData);
             dataSend(txData);
             mod_Block_stat = 0;
-
-            // timerOn(); //
         }
     }
 
@@ -1892,11 +1697,6 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(getApplicationContext(), "EDFA1 Clicked.", Toast.LENGTH_SHORT).show();
-            // byte [] txData = {CMD_MOD_VALUE_REQ,0x03,MOD_EDFA1,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_EDFA1);
         }
     };
@@ -1909,10 +1709,6 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            // byte [] txData = {CMD_MOD_VALUE_REQ,0x03,MOD_EDFA2,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_EDFA2);
         }
     };
@@ -1925,10 +1721,6 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            // byte [] txData = {CMD_MOD_VALUE_REQ,0x03,MOD_ONU,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_ONU);
         }
     };
@@ -1941,10 +1733,6 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            // byte [] txData = {CMD_MOD_VALUE_REQ,0x03,MOD_OTX,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_OTX);
         }
     };
@@ -1957,11 +1745,6 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            // byte [] txData =
-            // {CMD_MOD_VALUE_REQ,0x03,MOD_REPEAT1,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_REPEAT1);
         }
     };
@@ -1974,53 +1757,8 @@ public class DeviceControlActivity extends Activity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            // byte [] txData =
-            // {CMD_MOD_VALUE_REQ,0x03,MOD_REPEAT1,(byte)0xFE,0};
-            // txData[4] = SendChecksum(txData);
-            // dataSend(txData);
-            // mod_Block_stat = 0;
             setModulename(MOD_RMC);
         }
     };
-    protected OnClickListener mButtonRefreshClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mConnected == false) {
-                Toast.makeText(getApplicationContext(), "연결상태가 아닙니다.",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-            sendtomoduleCMD();
-        }
-    };
-/*
-	private void timerOn() {
-		if (timer != null) {
-			timerOff();
-		}
-		timer = new Timer();
-		timer.schedule(new UpdateTimerTask(), 2000, 2000);
-	}
 
-	private void timerOff() {
-		timer.cancel();
-		timer = null;
-	}
-
-	class UpdateTimerTask extends TimerTask {
-		@Override
-		public void run() {
-			handler.post(new Runnable() {
-
-				public void run() {
-					// Toast.makeText(getApplicationContext(), "timer Run",
-					// Toast.LENGTH_SHORT).show();
-					sendtomoduleCMD();
-					Toast.makeText(DeviceControlActivity.this,"sendtomoduleCMD",Toast.LENGTH_SHORT).show();
-				}
-			});
-
-		}
-	}
-*/
 }
