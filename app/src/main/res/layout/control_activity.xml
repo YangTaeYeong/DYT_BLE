@@ -72,6 +72,7 @@ Device Adrress와 connection status 표시 지움
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
         android:orientation="horizontal" >
 
     <Button
@@ -79,27 +80,37 @@ Device Adrress와 connection status 표시 지움
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="EDFA 1" />
+        android:background="#FFFFFF"
+        android:layout_margin="1dp"
+        android:text="EDFA 1"
+        android:textStyle="italic"/>
 
     <Button
         android:id="@+id/button2EDFA2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="EDFA 2" />
+        android:text="EDFA 2"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:textStyle="italic"/>
 
     <Button
         android:id="@+id/button3ONU"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="ONU" />
+        android:text="ONU"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:textStyle="italic"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
         android:orientation="horizontal" >
 
     <Button
@@ -107,21 +118,30 @@ Device Adrress와 connection status 표시 지움
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="FTX" />
+        android:text="FTX"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:textStyle="italic"/>
 
     <Button
         android:id="@+id/button5REPEAT1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="REPEATER" />
+        android:text="REPEATER"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:textStyle="italic"/>
 
     <Button
         android:id="@+id/button6RMC"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="RMC" />
+        android:text="RMC"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:textStyle="italic"/>
     </LinearLayout>
 
     <LinearLayout
@@ -137,12 +157,15 @@ Device Adrress와 connection status 표시 지움
             android:layout_height="wrap_content"
             android:text="@string/label_data_rx"
             android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textSize="25sp" />
+
+
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_weight="0.5"
             android:background="#000000"
             android:layout_margin="5dp"
@@ -154,12 +177,22 @@ Device Adrress와 connection status 표시 지움
             android:layout_margin="1dp"
             android:background="#FFFFFF">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dynamicArea"
+                android:background="#ffffff"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
          <TextView
             android:id="@+id/data_value_rx"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#000000"
             android:textSize="18sp" />
+
+            </LinearLayout>
 
         </ScrollView>
             </LinearLayout>
@@ -174,45 +207,51 @@ Device Adrress와 connection status 표시 지움
 
     </LinearLayout>
 
-<!--
-data Tx 항목 지움.
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:text="New Button"
+        android:id="@+id/btn_scroll" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_data_tx"
-            android:textSize="18sp" />
+    <!--
+    data Tx 항목 지움.
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/data_value_tx"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="20" />
-    </LinearLayout>
+            android:orientation="horizontal" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_data_tx"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/button_tx"
-            android:layout_width="120dp"
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/data_value_tx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="6dp"
-            android:text="@string/button_send" />
-    </LinearLayout>
--->
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_tx"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="6dp"
+                android:text="@string/button_send" />
+        </LinearLayout>
+    -->
 </LinearLayout>
