@@ -26,11 +26,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -38,6 +40,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -116,16 +120,18 @@ public class DeviceControlActivity extends Activity{
     private Button mButtonFTX;
     private Button mButtonREPEAT1;
     private Button mButtonRMC;
+    private Button btn_scroll;
     private Button mButtonRefresh;
     private int value = 0;
     private TextView textView;
     private CountDownTimer timer;
-
+    private ScrollView mScrollDbgmsg;
+    int scrollPosX, scrollPosY;
     private String mDeviceName;
     private String mDeviceAddress;
 
     private int mModName;
-
+    LinearLayout topLL;
     private Handler handler = new Handler();
 
 
@@ -201,7 +207,7 @@ public class DeviceControlActivity extends Activity{
 
     private void clearUI() {
         // mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataFieldRx.setText(R.string.no_data);
+        //mDataFieldRx.setText(R.string.no_data);
     }
 
     @Override
@@ -210,20 +216,28 @@ public class DeviceControlActivity extends Activity{
         setContentView(R.layout.control_activity);
 
 
+        topLL = (LinearLayout)findViewById(R.id.dynamicArea);
+
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mScrollDbgmsg = (ScrollView)findViewById(R.id.dbgMsg_scroll);
 
 
         //타이머 설정
         timer = new CountDownTimer(Integer.MAX_VALUE, 5000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
                 value++;
+                //scrollPosX = mScrollDbgmsg.getScrollX();
+                scrollPosY = mScrollDbgmsg.getScrollY();
                 sendtomoduleCMD();
+
+                mScrollDbgmsg.scrollTo(0, scrollPosY);
                 //Toast.makeText(DeviceControlActivity.this, "sendtomoduleCMD" + value, Toast.LENGTH_SHORT).show();
 
-                //if (value == 5) timer.cancel();
+                //if (value == 5) .cancel();
             }
 
             @Override
@@ -234,7 +248,7 @@ public class DeviceControlActivity extends Activity{
         //타이머 시작
         timer.start();
 
-        mDataFieldRx = (TextView) findViewById(R.id.data_value_rx);
+        //mDataFieldRx = (TextView) findViewById(R.id.data_value_rx);
 
         mtv_ModName = (TextView) findViewById(R.id.data_rx);
 
@@ -248,6 +262,7 @@ public class DeviceControlActivity extends Activity{
         mButtonFTX = (Button) findViewById(R.id.button4FTX);
         mButtonREPEAT1 = (Button) findViewById(R.id.button5REPEAT1);
         mButtonRMC = (Button) findViewById(R.id.button6RMC);
+        btn_scroll = (Button)findViewById(R.id.btn_scroll);
 
 
         // [ims]지움 mDataSend.setOnClickListener(mDataSendClickListener);
@@ -257,6 +272,7 @@ public class DeviceControlActivity extends Activity{
         mButtonFTX.setOnClickListener(mButtonFTXClickListener);
         mButtonREPEAT1.setOnClickListener(mButtonREPEAT1ClickListener);
         mButtonRMC.setOnClickListener(mButtonRMCClickListener);
+        btn_scroll.setOnClickListener(btnClickListener);
 
 
         ActionBar actionBar = getActionBar();
@@ -323,6 +339,7 @@ public class DeviceControlActivity extends Activity{
                 return true;
             case R.id.menu_refresh:
                 sendtomoduleCMD();
+                value++;
                 return true;
             case R.id.version:
                 Toast.makeText(this, "version", Toast.LENGTH_SHORT).show();
@@ -438,13 +455,14 @@ public class DeviceControlActivity extends Activity{
     }
 
     private void modDisplay_EDFA1(byte[] data) {
-        int tmp;
+        int tmp =1;
         int tmp2;
 
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("EDFA1 Module");
+            return;
             //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("\n< Alarm List >\n"));
@@ -629,7 +647,9 @@ public class DeviceControlActivity extends Activity{
             }
 
         }
-        mDataFieldRx.setText(stringBuilder.toString());
+        //mDataFieldRx.setText(stringBuilder.toString());
+
+
     }
 
     private void modDisplay_EDFA2(byte[] data) {
@@ -640,7 +660,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("EDFA2 Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            //stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
         } else {
             stringBuilder.append(String.format("\n< Alarm List >\n"));
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
@@ -835,7 +856,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("EDFA3 Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("\n< Alarm List >\n"));
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
@@ -1031,7 +1053,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("ONU Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("\n< Alarm List>\n"));
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
@@ -1127,7 +1150,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("FTX Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("< Alarm List>\n"));
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
@@ -1289,7 +1313,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("Repeater1 Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("< Alarm List >\n"));
 
@@ -1544,7 +1569,8 @@ public class DeviceControlActivity extends Activity{
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("RF Amp Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            //stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
         }
         mDataFieldRx.setText(stringBuilder.toString());
     }
@@ -1552,43 +1578,67 @@ public class DeviceControlActivity extends Activity{
     private void modDisplay_RMC(byte[] data) {
         int tmp;
         int tmp2;
-
+        topLL.removeAllViews();
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
             mtv_ModName.setText("RMC Module");
-            stringBuilder.append(String.format("Receiving Data...\n"));
+            return;
+            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             stringBuilder.append(String.format("\n<Module Information>\n"));
             tmp = (Value_Module_all[5] & 0xFF);
-            stringBuilder.append(String.format("SW Version       :: %.1f\n",
-                    (float) tmp / 10));
+            makeTitleView(stringBuilder.toString());
+            stringBuilder.setLength(0);
+
+            //stringBuilder.append(String.format("SW Version       ::"));
+            stringBuilder.setLength(0);
+            stringBuilder.append(String.format("%.1f\n",(float) tmp / 10));
+
+            makeDetailView("SW Version", stringBuilder.toString());
+
             {
                 byte[] tmpStr = new byte[8];
                 System.arraycopy(Value_Module_all, 6, tmpStr, 0, 8);
                 String Str = new String(tmpStr);
-                stringBuilder.append(String.format("Serial Number   :: "));
-                stringBuilder.append(String.valueOf(Str));
-                stringBuilder.append(String.format("\n"));
+                //stringBuilder.append(String.format("Serial Number   :: "));
+
+                //stringBuilder.setLength(0);
+
+                //stringBuilder.append(String.valueOf(Str));
+                makeDetailView("Serial Number", ""+String.valueOf(Str) + "\n");
+                stringBuilder.setLength(0);
+                //stringBuilder.append(String.format("\n"));
             }
             // Hw version 표시
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
-            stringBuilder.append(String.format("HW Version       :: %d", tmp));
-            {
-                byte[] tmpStr = new byte[1];
-                System.arraycopy(Value_Module_all, (FIX__ + 15), tmpStr, 0, 1);
-                String Str = new String(tmpStr);
+            //stringBuilder.append(String.format("HW Version       :: %d", tmp));
+            stringBuilder.append(""+tmp);
+
+
+            //stringBuilder.setLength(0);
+
+                byte[] tmpStr1 = new byte[1];
+                System.arraycopy(Value_Module_all, (FIX__ + 15), tmpStr1, 0, 1);
+                String Str = new String(tmpStr1);
                 stringBuilder.append(String.valueOf(Str));
-            }
+
+
             tmp = (Value_Module_all[FIX__ + 16] & 0xFF);
             stringBuilder.append(String.format(".%d\n", tmp));
+            //makeTextView(stringBuilder.toString(),true);
+            makeDetailView("HW Version", stringBuilder.toString());
+            stringBuilder.setLength(0);
             {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, 17, tmpStr, 0, 15);
-                String Str = new String(tmpStr);
-                stringBuilder.append(String.format("Model Name   :: "));
-                stringBuilder.append(String.valueOf(Str));
+                String Str1 = new String(tmpStr);
+                //stringBuilder.append(String.format("Model Name   :: "));
+                stringBuilder.append(String.valueOf(Str1));
                 stringBuilder.append(String.format("\n"));
+                makeDetailView("Model Name", stringBuilder.toString());
+                //makeTextView(stringBuilder.toString(),true);
+                stringBuilder.setLength(0);
             }
 
             //uptime display
@@ -1596,13 +1646,19 @@ public class DeviceControlActivity extends Activity{
                 tmp = ((Value_Module_all[STAT_ + 40] << 24 & 0xFF000000)
                         | (Value_Module_all[STAT_ + 39] << 16 & 0xFF0000)
                         | (Value_Module_all[STAT_ + 38] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 37] & 0xFF));
-                stringBuilder.append(String.format("Uptime :: [%d]", tmp));
-                stringBuilder.append(String.format("[%d:%d.%d]", (tmp / 3600), (tmp % 3600) / 60, (tmp % 60)));
+                //stringBuilder.append(String.format("Uptime :: [%d]", tmp));
+                //makeTextView(stringBuilder.toString(),true);
+                stringBuilder.setLength(0);
+                stringBuilder.append(String.format("[%d][%d:%d.%d]",tmp, (tmp / 3600), (tmp % 3600) / 60, (tmp % 60)));
                 stringBuilder.append(String.format("\n"));
-
+                //makeTextView(stringBuilder.toString(),true);
+                makeDetailView("Uptime", stringBuilder.toString());
+                stringBuilder.setLength(0);
             }
         }
-        mDataFieldRx.setText(stringBuilder.toString());
+        String str = stringBuilder.toString();
+        //mDataFieldRx.setText(str);
+
     }
 
     private void decodemodule(byte[] data) {
@@ -1701,6 +1757,69 @@ public class DeviceControlActivity extends Activity{
         }
     };
 
+    protected void makeTitleView(String str){
+        LinearLayout.LayoutParams titleParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        //titleParam.gravity = Gravity.CENTER;
+        LinearLayout titleLayout = new LinearLayout(DeviceControlActivity.this);
+        TextView title = new TextView(DeviceControlActivity.this);
+        title.setGravity(Gravity.CENTER);
+        title.setLayoutParams(titleParam);
+        titleLayout.setLayoutParams(titleParam);
+        //titleParam.setMargins(2, 2, 2, 0);
+        title.setBackgroundColor(Color.parseColor("#000000"));
+        //title.setPadding(10, 10, 10, 10);
+        title.setTextColor(Color.parseColor("#FF7200"));
+        title.setTextSize(20);
+        title.setText(str);
+        topLL.addView(titleLayout);
+        titleLayout.addView(title);
+    }
+
+    protected void makeDetailView(String str1, String str2){
+
+        LinearLayout.LayoutParams titleParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        titleParam.gravity = Gravity.CENTER;
+        LinearLayout detailLayout = new LinearLayout(DeviceControlActivity.this);
+        detailLayout.setOrientation(LinearLayout.HORIZONTAL);
+        TextView detailTv = new TextView(DeviceControlActivity.this);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+
+
+        //param2.setMargins(2, 2, 2, 0);
+        detailTv.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        //detailTv.setPadding(10, 10, 10, 10);
+        detailTv.setTextColor(Color.parseColor("#000000"));
+        detailTv.setTextSize(13);
+        detailTv.setText(str1);
+        detailTv.setGravity(Gravity.CENTER);
+
+        param2.weight = 1;
+        detailTv.setLayoutParams(param2);
+
+
+
+        Button detailBtn = new Button(DeviceControlActivity.this);
+        //param2.setMargins(2, 2, 2, 0);
+        detailBtn.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        //detailBtn.setPadding(10, 10, 10, 10);
+        detailBtn.setTextColor(Color.parseColor("#000000"));
+        detailBtn.setTextSize(13);
+        detailBtn.setText(str2);
+        detailBtn.setGravity(Gravity.CENTER);
+        detailBtn.setOnClickListener(detailBtnClickListener);
+
+
+        param2.weight = 1;
+        detailBtn.setLayoutParams(param2);
+
+        topLL.addView(detailLayout);
+        detailLayout.addView(detailTv);
+        detailLayout.addView(detailBtn);
+
+    }
+
     protected OnClickListener mButtonEDFA2ClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -1761,4 +1880,19 @@ public class DeviceControlActivity extends Activity{
         }
     };
 
+    protected OnClickListener btnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+           topLL.removeAllViews();
+
+        }
+    };
+
+    protected OnClickListener detailBtnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(DeviceControlActivity.this,"clicked",Toast.LENGTH_SHORT).show();
+
+        }
+    };
 }
