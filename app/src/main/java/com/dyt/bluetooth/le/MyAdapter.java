@@ -1,23 +1,23 @@
 package com.dyt.bluetooth.le;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 class MyAdapter extends BaseAdapter {
 
-    Context context;   // ÇöÀç È­¸éÀÇ Á¦¾î±ÇÀÚ
-    int layout;         // ÇÑ ÇàÀ» ±×·ÁÁÙ ·¹ÀÌ¾Æ¿ô
-    ArrayList <String[]>  al;       // ´Ù·®ÀÇ µ¥ÀÌÅÍ
-    LayoutInflater inf;     // layout xml ÆÄÀÏÀ» °´Ã¼·Î ÀüÈ¯ÇÒ¶§ ÇÊ¿ä
+    Context context;
+    int layout;
+    ArrayList <String[]>  al;
+    LayoutInflater inf;
 
-    public MyAdapter(Context context, int layout, ArrayList al) {// ÃÊ±âÈ­
+    public MyAdapter(Context context, int layout, ArrayList al) {
         this.context = context;
         this.layout = layout;
         this.al = al;
@@ -25,31 +25,34 @@ class MyAdapter extends BaseAdapter {
                 (Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
-    public int getCount() { // ListView ¿¡¼­ »ç¿ëÇÒ µ¥ÀÌÅÍÀÇ ÃÑ°³¼ö
+    public int getCount() {
         return al.size();
     }
     @Override
-    public Object getItem(int position) { // ÇØ´ç position¹øÂ°ÀÇ µ¥ÀÌÅÍ °ª
+    public Object getItem(int position) {
         return al.get(position);
     }
     @Override
-    public long getItemId(int position){// ÇØ´ç position¹øÂ°ÀÇ À¯´ÏÅ©ÇÑid °ª
+    public long getItemId(int position){
         return position;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //ÇØ´çÇà ¼ø¼­,   ÇØ´çÇà ·¹ÀÌ¾Æ¿ô,          ¸®½ºÆ®ºä
-        // ÇÑÇàÀÇ È­¸éÀ» ¼ÂÆÃÇÏ´Â ¸Ş¼­µå (°¡Àå Áß¿ä)
 
+        final int pos = position ;
         if (convertView == null) {
             convertView = inf.inflate(layout, null);
-            //xmlÆÄÀÏ·Î ·¹ÀÌ¾Æ¿ô°´Ã¼ »ı¼º
         }
         TextView tv = (TextView)convertView.findViewById(R.id.textView1);
         Button btn =(Button)convertView.findViewById(R.id.button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("df",Integer.toString(pos + 1) + "ë²ˆ ì•„ì´í…œì´ ì„ íƒë˜ì—ˆìŠµë‹ˆë‹¤.");
+            }
+        });
 
         tv.setText(al.get(position)[0].toString());
-        btn.setText(al.get(position)[1].toString()); // ÇØ´ç¹øÂ°ÀÇ °ªÀ» ¼³Á¤
+        btn.setText(al.get(position)[1].toString());
 
         return convertView;
     }
