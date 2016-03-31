@@ -24,7 +24,6 @@ public class Network {
         this.adapter = adapter;
     }
 
-
     public final static String TAG = BluetoothLeService.class.getName();
     public int mod_Block_stat;
     public static final int STAT_ALL_BLOCK = 0x0FFFF;
@@ -209,16 +208,6 @@ public class Network {
         }
     }
 
-	/*
-     * [ims] 지움.
-	 *
-	 * // jw Send 버튼 눌렀을때 protected OnClickListener mDataSendClickListener = new
-	 * OnClickListener() {
-	 *
-	 * @Override public void onClick(View v) { byte [] txData =
-	 * mDataFieldTx.getText().toString().getBytes(); dataSend(txData); } };
-	 */
-
     protected void sendtomoduleCMD() {
         byte[] txData = {CMD_MOD_VALUE_REQ, 0x03, MOD_NULL, (byte) 0xFE, 0};
         if (mModName != MOD_NULL) {
@@ -243,18 +232,18 @@ public class Network {
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("EDFA1 Module");
+            DeviceControlActivity.mtv_ModName.setText("EDFA1 Module");
             return;
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"\n< Alarm List >\n",""});
+            al.add(new String[]{"< Alarm List >",""});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                al.add(new String[]{"\nOptical Input\n", ""});
+                al.add(new String[]{"Optical Input", ""});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                al.add(new String[]{"\nOptical Output\n", ""});
+                al.add(new String[]{"Optical Output", ""});
             }
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
                 al.add(new String[]{"LD1 Temperature\n", ""});
@@ -349,8 +338,7 @@ public class Network {
             stringBuilder.append(String.format("%.1f dBm / %.1f dBm\n",(float) tmp2 / 10, (float) tmp / 10));
             al.add(new String[]{"Output Power Alarm Threshold MIN/MAX\n", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            stringBuilder.append(String.format("\n< Reference value >\n"));
-            al.add(new String[]{"\n< Reference value >\n", ""});
+            al.add(new String[]{"< Reference value >", ""});
 
             tmp = Value_Module_all[FIX__ + 33] * 256;
             tmp |= (Value_Module_all[FIX__ + 32] & 0xFF);
@@ -372,12 +360,12 @@ public class Network {
             stringBuilder.append(String.format("%.1f `C, %.1f `C\n",(float) tmp / 10, (float) tmp2 / 10));
             al.add(new String[]{"LD Temperature  Reference\n", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            al.add(new String[]{"\n<Module Information>\n", ""});
+            al.add(new String[]{"<Module Information>", ""});
             stringBuilder.setLength(0);
 
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
-            al.add(new String[]{"\nSW Version\n", stringBuilder.toString()});
+            al.add(new String[]{"SW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
             // Serial 번호 표시
             {
@@ -387,7 +375,7 @@ public class Network {
                 stringBuilder.append(String.format("Serial Number   :: "));
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
-                al.add(new String[]{"\nSerial Number\n", stringBuilder.toString()});
+                al.add(new String[]{"Serial Number", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
             // Hw version 표시
@@ -402,7 +390,7 @@ public class Network {
             }
             tmp = (Value_Module_all[FIX__ + 16] & 0xFF);
             stringBuilder.append(String.format(".%d\n", tmp));
-            al.add(new String[]{"\nHW Version\n", stringBuilder.toString()});
+            al.add(new String[]{"HW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
             // Model 명 표시
@@ -412,7 +400,7 @@ public class Network {
                 String Str = new String(tmpStr);
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
-                al.add(new String[]{"\nModel Name\n", stringBuilder.toString()});
+                al.add(new String[]{"Model Name", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
 
@@ -424,7 +412,7 @@ public class Network {
                 stringBuilder.append(String.format("[%d]", tmp));
                 stringBuilder.append(String.format("[%d:%d.%d]", (tmp / 3600), (tmp % 3600) / 60, (tmp % 60)));
                 stringBuilder.append(String.format("\n"));
-                al.add(new String[]{"\nUptime\n", stringBuilder.toString()});
+                al.add(new String[]{"Uptime", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
         }
@@ -434,16 +422,15 @@ public class Network {
     protected void modDisplay_EDFA2(byte[] data) {
         int tmp;
         int tmp2;
-
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("EDFA2 Module");
+            DeviceControlActivity.mtv_ModName.setText("EDFA2 Module");
             return;
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"\n< Alarm List >\n",""});
+            al.add(new String[]{"< Alarm List >",""});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
                 al.add(new String[]{"Optical Input\n", ""});
@@ -460,7 +447,7 @@ public class Network {
             if ((tmp & (0x0001 << 6)) == (0x0001 << 6)) {
                 al.add(new String[]{"Board Temperature\n", ""});
             }
-            al.add(new String[]{"\n< Status >\n", ""});
+            al.add(new String[]{"< Status >", ""});
 
             tmp = Value_Module_all[STAT_ + 13] * 256;
             tmp |= (Value_Module_all[STAT_ + 12] & 0xFF);
@@ -544,8 +531,7 @@ public class Network {
             stringBuilder.append(String.format("%.1f dBm / %.1f dBm\n",(float) tmp2 / 10, (float) tmp / 10));
             al.add(new String[]{"Output Power Alarm Threshold MIN/MAX", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            stringBuilder.append(String.format("\n< Reference value >\n"));
-            al.add(new String[]{"\n< Reference value >\n", ""});
+            al.add(new String[]{"< Reference value >", ""});
 
             tmp = Value_Module_all[FIX__ + 33] * 256;
             tmp |= (Value_Module_all[FIX__ + 32] & 0xFF);
@@ -569,7 +555,7 @@ public class Network {
             al.add(new String[]{"LD Temperature  Reference", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
-            al.add(new String[]{"\n<Module Information>\n", ""});
+            al.add(new String[]{"<Module Information>", ""});
 
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
@@ -610,7 +596,6 @@ public class Network {
                 al.add(new String[]{"Model Name", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-
             //uptime display
             if (uptimedisplay == UPTIME_ENABLE) {
                 tmp = ((Value_Module_all[STAT_ + 39] << 24 & 0xFF000000)
@@ -622,7 +607,6 @@ public class Network {
                 al.add(new String[]{"Uptime", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-
         }
         adapter.notifyDataSetChanged();
     }
@@ -634,7 +618,7 @@ public class Network {
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("EDFA3 Module");
+            DeviceControlActivity.mtv_ModName.setText("EDFA3 Module");
             return;
             //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
@@ -749,7 +733,7 @@ public class Network {
                     .append(String
                             .format("Output Power Alarm Threshold MIN/MAX   :: %.1f dBm / %.1f dBm\n",
                                     (float) tmp2 / 10, (float) tmp / 10));
-            stringBuilder.append(String.format("\n< Reference value >\n"));
+            stringBuilder.append(String.format("< Reference value >"));
 
             tmp = Value_Module_all[FIX__ + 33] * 256;
             tmp |= (Value_Module_all[FIX__ + 32] & 0xFF);
@@ -774,7 +758,7 @@ public class Network {
                     "LD Temperature  Reference   :: %.1f `C, %.1f `C\n",
                     (float) tmp / 10, (float) tmp2 / 10));
 
-            stringBuilder.append(String.format("\n<Module Information>\n"));
+            stringBuilder.append(String.format("<Module Information>"));
 
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("SW Version       :: %.1f\n",
@@ -808,7 +792,6 @@ public class Network {
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
             }
-
             //uptime display
             if (uptimedisplay == UPTIME_ENABLE) {
                 tmp = ((Value_Module_all[STAT_ + 39] << 24 & 0xFF000000)
@@ -824,79 +807,61 @@ public class Network {
 
     protected void modDisplay_ONU(byte[] data) {
         int tmp;
-        int tmp2;
-
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("ONU Module");
+            DeviceControlActivity.mtv_ModName.setText("ONU Module");
             return;
-            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            //stringBuilder.append(String.format("\n< Alarm List>\n"));
-            al.add(new String[]{"\n< Alarm List>\n", ""});
+            al.add(new String[]{"< Alarm List>", ""});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                //stringBuilder.append(String.format("Input Power\n"));
                 al.add(new String[]{"Input Power\n", ""});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                //stringBuilder.append(String.format("Output Power\n"));
                 al.add(new String[]{"Output Power\n", ""});
             }
-            //stringBuilder.append(String.format("\n< Status >\n"));
-            al.add(new String[]{"\n< Status >\n", ""});
+            al.add(new String[]{"< Status >", ""});
 
             tmp = Value_Module_all[STAT_ + 8] * 256;
             tmp |= (Value_Module_all[STAT_ + 7] & 0xFF);
-            //stringBuilder.append(String.format("Input Power   :: %.1f dBm\n", (float) tmp / 10));
             stringBuilder.append(String.format("%.1f dBm\n", (float) tmp / 10));
             al.add(new String[]{"Input Power", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
             tmp = Value_Module_all[STAT_ + 10] * 256;
             tmp |= (Value_Module_all[STAT_ + 9] & 0xFF);
-            //stringBuilder.append(String.format("Output Power   :: %.1f dBm\n", (float) tmp / 10));
             stringBuilder.append(String.format("%.1f dBm\n", (float) tmp / 10));
             al.add(new String[]{"Input Power", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
             tmp = Value_Module_all[STAT_ + 16] * 256;
             tmp |= (Value_Module_all[STAT_ + 15] & 0xFF);
-            //stringBuilder.append(String.format("Module Temperature   :: %.1f `C\n", (float) tmp / 10));
             stringBuilder.append(String.format("%.1f `C\n", (float) tmp / 10));
             al.add(new String[]{"Module Temperature", stringBuilder.toString()});
             stringBuilder.setLength(0);
             tmp = ((Value_Module_all[STAT_ + 6] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 5] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                //stringBuilder.append(String.format("\nInput Power Alarm   :: Enable\n"));
                 al.add(new String[]{"Input Power Alarm", "Enable"});
             } else {
-                //stringBuilder.append(String.format("\nInput Power Alarm   :: Disable\n"));
                 al.add(new String[]{"Input Power Alarm", "Disable"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                //stringBuilder.append(String.format("Output Power Alarm   :: Enable\n"));
                 al.add(new String[]{"Output Power Alarm", "Enable"});
             } else {
-                //stringBuilder.append(String.format("Output Power Alarm   :: Enable\n"));
                 al.add(new String[]{"Output Power Alarm", "Disable"});
             }
-
-            //stringBuilder.append(String.format("\n<Module Information>\n"));
-            al.add(new String[]{"\n<Module Information>\n",""});
+            al.add(new String[]{"<Module Information>",""});
             tmp = (Value_Module_all[5] & 0xFF);
-            //stringBuilder.append(String.format("SW Version       :: %.1f\n", (float) tmp / 10));
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
-            al.add(new String[]{"\nSW Version\n", stringBuilder.toString()});
+            al.add(new String[]{"SW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
             {
                 byte[] tmpStr = new byte[8];
                 System.arraycopy(Value_Module_all, (FIX__ + 6), tmpStr, 0, 8);
                 String Str = new String(tmpStr);
-                //stringBuilder.append(String.format("Serial Number   :: "));
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
                 al.add(new String[]{"\nSerial Numbe\n", stringBuilder.toString()});
@@ -920,10 +885,9 @@ public class Network {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, (FIX__ + 17), tmpStr, 0, 15);
                 String Str = new String(tmpStr);
-                //stringBuilder.append(String.format("Model Name   :: "));
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
-                al.add(new String[]{"\nModel Name\n", stringBuilder.toString()});
+                al.add(new String[]{"Model Name", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
 
@@ -935,7 +899,7 @@ public class Network {
                 stringBuilder.append(String.format("[%d]", tmp));
                 stringBuilder.append(String.format("[%d:%d.%d]", (tmp / 3600), (tmp % 3600) / 60, (tmp % 60)));
                 stringBuilder.append(String.format("\n"));
-                al.add(new String[]{"\nUptime\n", stringBuilder.toString()});
+                al.add(new String[]{"Uptime", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
         }
@@ -944,14 +908,12 @@ public class Network {
 
     protected void modDisplay_OTX(byte[] data) {
         int tmp;
-        int tmp2;
 
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("FTX Module");
+            DeviceControlActivity.mtv_ModName.setText("FTX Module");
             return;
-            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
@@ -967,7 +929,7 @@ public class Network {
                 al.add(new String[]{"RF Input Power\n", ""});
             }
 
-            al.add(new String[]{"\n< Status >\n", ""});
+            al.add(new String[]{"< Status >", ""});
 
             if (Value_Module_all[STAT_ + 8] == 0x31) {
                 al.add(new String[]{"RF Mode Status", "MGC"});
@@ -1114,127 +1076,97 @@ public class Network {
     }
 
     protected void modDisplay_REPEATER1(byte[] data) {
-
-
         int tmp;
-        int tmp2;
 
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("Repeater1 Module");
-
+            DeviceControlActivity.mtv_ModName.setText("Repeater1 Module");
             return;
-            //stringBuilder.append(String.format("Receiving Data...\n"));
         } else {
-            //stringBuilder.append(String.format("< Alarm List >\n"));
             al.clear();
             adapter.notifyDataSetChanged();
             al.add(new String[]{"< Alarm List >\n", ""});
 
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                //stringBuilder.append(String.format("ORX1 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX1 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                //stringBuilder.append(String.format("ORX2 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX2 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
-                //stringBuilder.append(String.format("ORX3 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX3 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 3)) == (0x0001 << 3)) {
-                //stringBuilder.append(String.format("ORX4 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX4 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 4)) == (0x0001 << 4)) {
-                //stringBuilder.append(String.format("ORX5 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX5 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 5)) == (0x0001 << 5)) {
-                //stringBuilder.append(String.format("ORX6 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX6 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 6)) == (0x0001 << 6)) {
-                //stringBuilder.append(String.format("ORX7 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX7 Alarm Status", "Raised"});
             }
             if ((tmp & (0x0001 << 7)) == (0x0001 << 7)) {
-                //stringBuilder.append(String.format("ORX8 Alarm Status   :: Raised\n"));
                 al.add(new String[]{"ORX8 Alarm Status", "Raised"});
-
             }
             if ((tmp & (0x0001 << 8)) == (0x0001 << 8)) {
-                //stringBuilder.append(String.format("OTX Alarm Status   :: Raised\n"));
                 al.add(new String[]{"OTX Alarm Status", "Raised"});
             }
-
-            //stringBuilder.append(String.format("\n< Status >\n"));
-            al.add(new String[]{"\n< Status >\n", ""});
+            al.add(new String[]{"< Status >", ""});
 
             tmp = Value_Module_all[STAT_ + 9] * 256;
             tmp |= (Value_Module_all[STAT_ + 8] & 0xFF);
-            //stringBuilder.append(String.format("OTx Out Power   :: %.1f dBm\n",(float) tmp / 10));
             al.add(new String[]{"OTx Out Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
 
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 0)) == (0x0001 << 0)) {
                 tmp = Value_Module_all[STAT_ + 11] * 256;
                 tmp |= (Value_Module_all[STAT_ + 10] & 0xFF);
-                //stringBuilder.append(String.format("ORx1 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx1 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 1)) == (0x0001 << 1)) {
                 tmp = Value_Module_all[STAT_ + 13] * 256;
                 tmp |= (Value_Module_all[STAT_ + 12] & 0xFF);
-                //stringBuilder.append(String.format("ORx2 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx2 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 2)) == (0x0001 << 2)) {
                 tmp = Value_Module_all[STAT_ + 15] * 256;
                 tmp |= (Value_Module_all[STAT_ + 14] & 0xFF);
-                //stringBuilder.append(String.format("ORx3 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx3 Rx Power", String.format("%.1f dBm\n", (float) tmp / 10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 3)) == (0x0001 << 3)) {
                 tmp = Value_Module_all[STAT_ + 17] * 256;
                 tmp |= (Value_Module_all[STAT_ + 16] & 0xFF);
-                //stringBuilder.append(String.format("ORx4 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx4 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 4)) == (0x0001 << 4)) {
                 tmp = Value_Module_all[STAT_ + 19] * 256;
                 tmp |= (Value_Module_all[STAT_ + 18] & 0xFF);
-                //stringBuilder.append(String.format("ORx5 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx5 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 5)) == (0x0001 << 5)) {
                 tmp = Value_Module_all[STAT_ + 21] * 256;
                 tmp |= (Value_Module_all[STAT_ + 20] & 0xFF);
-                //stringBuilder.append(String.format("ORx6 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx6 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 6)) == (0x0001 << 6)) {
                 tmp = Value_Module_all[STAT_ + 23] * 256;
                 tmp |= (Value_Module_all[STAT_ + 22] & 0xFF);
-                //stringBuilder.append(String.format("ORx7 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx7 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 7)) == (0x0001 << 7)) {
                 tmp = Value_Module_all[STAT_ + 25] * 256;
                 tmp |= (Value_Module_all[STAT_ + 24] & 0xFF);
-                //stringBuilder.append(String.format("ORx8 Rx Power   :: %.1f dBm\n", (float) tmp / 10));
                 al.add(new String[]{"ORx8 Rx Power", String.format("%.1f dBm\n",(float)tmp/10).toString()});
             }
 
             tmp = Value_Module_all[STAT_ + 27] * 256;
             tmp |= (Value_Module_all[STAT_ + 26] & 0xFF);
-            //stringBuilder.append(String.format("Module Temperature   :: %.1f `C\n", (float) tmp / 10));
             al.add(new String[]{"Module Temperature", String.format("%.1f `C\n", (float) tmp / 10).toString()});
-
-            //stringBuilder.append(String.format("\n< Install ORx Module >\n"));
-            al.add(new String[]{"\n< Install ORx Module >\n",""});
+            al.add(new String[]{"< Install ORx Module >",""});
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 0)) == (0x0001 << 0)) {
                 stringBuilder.append(String.format("ORx1  "));
             }
@@ -1270,11 +1202,9 @@ public class Network {
 
             tmp = ((Value_Module_all[STAT_ + 6] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 5] & 0xFF));
             if ((tmp & (0x0001 << 8)) == (0x0001 << 8)) {
-                //stringBuilder.append(String.format("\nOTX Alarm   :: Enable\n"));
-                al.add(new String[]{"\nOTX Alarm","Enable"});
+                al.add(new String[]{"OTX Alarm","Enable"});
             } else {
-                //stringBuilder.append(String.format("\nOTX Alarm   :: Enable\n"));
-                al.add(new String[]{"\nOTX Alarm","Disable"});
+                al.add(new String[]{"OTX Alarm","Disable"});
             }
             //stringBuilder.append(String.format("ORX Alarm\n"));
             al.add(new String[]{"ORX Alarm\n", ""});
@@ -1310,7 +1240,7 @@ public class Network {
             }
             al.add(new String[]{stringBuilder.toString(),""});
             stringBuilder.setLength(0);
-            stringBuilder.append(String.format("\n  Disable ::"));
+            stringBuilder.append(String.format("Disable ::"));
             if ((tmp & (0x0001 << 0)) == 0) {
                 stringBuilder.append(String.format(" ORx1"));
             }
@@ -1341,11 +1271,8 @@ public class Network {
             stringBuilder.append(String.format("\n"));
             al.add(new String[]{stringBuilder.toString(), ""});
             stringBuilder.setLength(0);
-
-            //stringBuilder.append(String.format("\n<Module Information>\n"));
-            al.add(new String[]{"\n<Module Information>\n", ""});
+            al.add(new String[]{"<Module Information>", ""});
             tmp = (Value_Module_all[5] & 0xFF);
-            //stringBuilder.append(String.format("SW Version       :: %.1f\n",(float) tmp / 10));
             al.add(new String[]{"SW Version", String.format("%.1f\n",(float)tmp/10).toString()});
             {
                 byte[] tmpStr = new byte[8];
@@ -1359,7 +1286,6 @@ public class Network {
             }
             // Hw version 표시
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
-            //stringBuilder.append(String.format("HW Version       :: %d", tmp));
             stringBuilder.append(String.format("%d", tmp));
             {
                 byte[] tmpStr = new byte[1];
@@ -1375,7 +1301,6 @@ public class Network {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, 17, tmpStr, 0, 15);
                 String Str = new String(tmpStr);
-                //stringBuilder.append(String.format("Model Name   :: "));
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
 
@@ -1388,7 +1313,6 @@ public class Network {
                 tmp = ((Value_Module_all[STAT_ + 31] << 24 & 0xFF000000)
                         | (Value_Module_all[STAT_ + 30] << 16 & 0xFF0000)
                         | (Value_Module_all[STAT_ + 29] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 28] & 0xFF));
-                //stringBuilder.append(String.format("Uptime :: [%d]", tmp));
                 stringBuilder.append(String.format("[%d]", tmp));
                 stringBuilder.append(String.format("[%d:%d.%d]", (tmp / 3600), (tmp % 3600) / 60, (tmp % 60)));
                 stringBuilder.append(String.format("\n"));
@@ -1400,15 +1324,16 @@ public class Network {
     }
 
     protected void modDisplay_AMP(byte[] data) {
-        al.clear();
+
         int tmp;
-        int tmp2;
 
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("RF Amp Module");
+            DeviceControlActivity.mtv_ModName.setText("RF Amp Module");
             //stringBuilder.append(String.format("Receiving Data...\n"));
+            al.clear();
+            adapter.notifyDataSetChanged();
             al.add(new String[]{"RF Amp Module", ""});
             return;
         }
@@ -1416,23 +1341,17 @@ public class Network {
     }
 
     protected void modDisplay_RMC(byte[] data) {
-
-
         int tmp;
-        int tmp2;
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            //mtv_ModName.setText("RMC Module");
-            //al.add(new String[]{"RMC Module", ""});
-            //adapter.notifyDataSetChanged();
+            DeviceControlActivity.mtv_ModName.setText("RMC Module");
             return;
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            stringBuilder.append(String.format("\n<Module Information>\n"));
             tmp = (Value_Module_all[5] & 0xFF);
-            al.add(new String[]{"\n<Module Information>\n", ""});
+            al.add(new String[]{"<Module Information>", ""});
 
             stringBuilder.setLength(0);
 

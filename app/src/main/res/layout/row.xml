@@ -14,24 +14,28 @@
         android:id="@+id/textView1"
         android:layout_marginRight="1dp"
         android:layout_marginTop="1dp"
-
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:background="#FFFFFF"
-        android:textColor="#000000"
+        android:textColor="#AA0000FF"
+        android:textSize="18sp"
+        android:autoText="true"
+        android:textStyle="bold"
         android:text="Large Text"/>
 
     <Button
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
         android:layout_marginBottom="1dp"
+        android:textSize="13sp"
         android:text="New Button"
         android:textColor="#000000"
-        android:background="#FFFFFF"
+        android:background="#EEEEEE"
         android:id="@+id/button" />
 
     </LinearLayout>

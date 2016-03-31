@@ -28,14 +28,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
  * device. The Activity communicates with {@code BluetoothLeService}, which in
  * turn interacts with the Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity implements OnClickListener{
+public class DeviceControlActivity extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -63,10 +62,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
     public static final byte MOD_RF_AMP = 0x1a;
     public static final byte MOD_RMC = (byte) 0x82;
 
-    private TextView mConnectionState;
-    private TextView mDataFieldRx;
-    private EditText mDataFieldTx;
-    private TextView mtv_ModName;
+    public static TextView mtv_ModName;
     private TextView mdevice_addr;
     private Button mButtonEDFA1;
     private Button mButtonEDFA2;
@@ -74,16 +70,11 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
     private Button mButtonFTX;
     private Button mButtonREPEAT1;
     private Button mButtonRMC;
-    private Button btn_scroll;
 
-    private int value = 0;
     private CountDownTimer timer;
-    int scrollPosX, scrollPosY;
     private String mDeviceName;
     private String mDeviceAddress;
     private final static String TAG = BluetoothLeService.class.getName();
-    private Handler handler = new Handler();
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothGattCharacteristic mWriteCharacteristic;
@@ -103,8 +94,6 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
         //    1. 다량의 데이터 (ArrayList)
         //    2. Adapter
         //    3. AdapterView 선정 (ListView)
-
-
         adapter = new MyAdapter(
                 getApplicationContext(), // 현재 화면의 제어권자
                 R.layout.row, // 한행을 담당할 Layout
@@ -123,16 +112,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
 
             @Override
             public void onTick(long millisUntilFinished) {
-                value++;
-                //scrollPosX = mScrollDbgmsg.getScrollX();
-                //scrollPosY = mScrollDbgmsg.getScrollY();
                 network.sendtomoduleCMD();
-
-
-                //mScrollDbgmsg.scrollTo(0, scrollPosY);
-                //Toast.makeText(DeviceControlActivity.this, "sendtomoduleCMD" + value, Toast.LENGTH_SHORT).show();
-
-                //if (value == 5) .cancel();
             }
 
             @Override
@@ -152,7 +132,6 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
         mButtonFTX = (Button) findViewById(R.id.button4FTX);
         mButtonREPEAT1 = (Button) findViewById(R.id.button5REPEAT1);
         mButtonRMC = (Button) findViewById(R.id.button6RMC);
-        btn_scroll = (Button) findViewById(R.id.btn_scroll);
 
         mButtonEDFA1.setOnClickListener(this);
         mButtonEDFA2.setOnClickListener(this);
@@ -160,6 +139,7 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
         mButtonFTX.setOnClickListener(this);
         mButtonREPEAT1.setOnClickListener(this);
         mButtonRMC.setOnClickListener(this);
+        lv.setOnItemClickListener(this);
 
         ActionBar actionBar = getActionBar();
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -286,7 +266,6 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
                 return true;
             case R.id.menu_refresh:
                 network.sendtomoduleCMD();
-                value++;
                 return true;
             case R.id.version:
                 Toast.makeText(this, "version", Toast.LENGTH_SHORT).show();
@@ -366,5 +345,14 @@ public class DeviceControlActivity extends Activity implements OnClickListener{
             }
             network.setModulename(MOD_RMC);
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // parent는 AdapterView의 속성의 모두 사용 할 수 있다.
+        String tv = (String)parent.getAdapter().getItem(position);
+        Toast.makeText(getApplicationContext(), tv, Toast.LENGTH_SHORT).show();
+
+
     }
 }

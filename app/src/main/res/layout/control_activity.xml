@@ -4,60 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
-<!--
-Device Adrress와 connection status 표시 지움
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_device_address"
-            android:textSize="18sp" />
-
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/device_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_state"
-            android:textSize="18sp" />
-
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/connection_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/disconnected"
-            android:textSize="18sp" />
-    </LinearLayout>
-
--->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
     <TextView
         android:id="@+id/device_addr"
@@ -176,51 +126,4 @@ Device Adrress와 connection status 표시 지움
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/btn_scroll" />
-
-    <!--
-    data Tx 항목 지움.
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_data_tx"
-                android:textSize="18sp" />
-
-            <Space
-                android:layout_width="5dp"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/data_value_tx"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="20" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/button_tx"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="6dp"
-                android:text="@string/button_send" />
-        </LinearLayout>
-    -->
 </LinearLayout>
