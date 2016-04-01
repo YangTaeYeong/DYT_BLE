@@ -68,7 +68,7 @@ public class Network {
     public int mModName;
     public int uptimedisplay;
 
-    // jw:¿©±â¼­ ¼Û¼ö½Å Enable Ã³¸®
+    // jw:ï¿½ï¿½ï¿½â¼­ ï¿½Û¼ï¿½ï¿½ï¿½ Enable Ã³ï¿½ï¿½
     public void setDataNotify() {
         List<BluetoothGattService> gattServices = mBluetoothLeService
                 .getSupportedGattServices();
@@ -152,7 +152,7 @@ public class Network {
         }
     }
 
-    // jw µ¥ÀÌÅÍ ¼ö½Å
+    // jw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void dataRecv(byte[] data) {
         if (data != null) {
             if (data[0] == 0x11) {
@@ -192,7 +192,7 @@ public class Network {
                 break;
         }
     }
-    // jw µ¥ÀÌÅÍ ¼Û½Å
+    // jw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û½ï¿½
     public void dataSend(byte[] data) {
         List<BluetoothGattService> gattServices = mBluetoothLeService
                 .getSupportedGattServices();
@@ -237,24 +237,24 @@ public class Network {
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"< Alarm List >",""});
+            al.add(new String[]{"< Alarm List >","","INVISIBLE"});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                al.add(new String[]{"Optical Input", ""});
+                al.add(new String[]{"Optical Input", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                al.add(new String[]{"Optical Output", ""});
+                al.add(new String[]{"Optical Output", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
-                al.add(new String[]{"LD1 Temperature\n", ""});
+                al.add(new String[]{"LD1 Temperature\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 4)) == (0x0001 << 4)) {
-                al.add(new String[]{"LD2 Temperature\n", ""});
+                al.add(new String[]{"LD2 Temperature\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 6)) == (0x0001 << 6)) {
-                al.add(new String[]{"Board Temperature\n", ""});
+                al.add(new String[]{"Board Temperature\n", "","INVISIBLE"});
             }
-            al.add(new String[]{"< Status >\n", ""});
+            al.add(new String[]{"< Status >\n", "","INVISIBLE"});
 
             tmp = Value_Module_all[STAT_ + 13] * 256;
             tmp |= (Value_Module_all[STAT_ + 12] & 0xFF);
@@ -338,7 +338,7 @@ public class Network {
             stringBuilder.append(String.format("%.1f dBm / %.1f dBm\n",(float) tmp2 / 10, (float) tmp / 10));
             al.add(new String[]{"Output Power Alarm Threshold MIN/MAX\n", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            al.add(new String[]{"< Reference value >", ""});
+            al.add(new String[]{"< Reference value >", "","INVISIBLE"});
 
             tmp = Value_Module_all[FIX__ + 33] * 256;
             tmp |= (Value_Module_all[FIX__ + 32] & 0xFF);
@@ -360,14 +360,14 @@ public class Network {
             stringBuilder.append(String.format("%.1f `C, %.1f `C\n",(float) tmp / 10, (float) tmp2 / 10));
             al.add(new String[]{"LD Temperature  Reference\n", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            al.add(new String[]{"<Module Information>", ""});
+            al.add(new String[]{"<Module Information>", "","INVISIBLE"});
             stringBuilder.setLength(0);
 
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
             al.add(new String[]{"SW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            // Serial ¹øÈ£ Ç¥½Ã
+            // Serial ï¿½ï¿½È£ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[8];
                 System.arraycopy(Value_Module_all, (FIX__ + 6), tmpStr, 0, 8);
@@ -378,7 +378,7 @@ public class Network {
                 al.add(new String[]{"Serial Number", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("%d", tmp));
 
@@ -393,7 +393,7 @@ public class Network {
             al.add(new String[]{"HW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
-            // Model ¸í Ç¥½Ã
+            // Model ï¿½ï¿½ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, (FIX__ + 17), tmpStr, 0, 15);
@@ -430,24 +430,24 @@ public class Network {
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"< Alarm List >",""});
+            al.add(new String[]{"< Alarm List >","","INVISIBLE"});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                al.add(new String[]{"Optical Input\n", ""});
+                al.add(new String[]{"Optical Input\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                al.add(new String[]{"Optical Output\n", ""});
+                al.add(new String[]{"Optical Output\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
-                al.add(new String[]{"LD1 Temperature\n", ""});
+                al.add(new String[]{"LD1 Temperature\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 4)) == (0x0001 << 4)) {
-                al.add(new String[]{"LD2 Temperature\n", ""});
+                al.add(new String[]{"LD2 Temperature\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 6)) == (0x0001 << 6)) {
-                al.add(new String[]{"Board Temperature\n", ""});
+                al.add(new String[]{"Board Temperature\n", "","INVISIBLE"});
             }
-            al.add(new String[]{"< Status >", ""});
+            al.add(new String[]{"< Status >", "","INVISIBLE"});
 
             tmp = Value_Module_all[STAT_ + 13] * 256;
             tmp |= (Value_Module_all[STAT_ + 12] & 0xFF);
@@ -531,7 +531,7 @@ public class Network {
             stringBuilder.append(String.format("%.1f dBm / %.1f dBm\n",(float) tmp2 / 10, (float) tmp / 10));
             al.add(new String[]{"Output Power Alarm Threshold MIN/MAX", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            al.add(new String[]{"< Reference value >", ""});
+            al.add(new String[]{"< Reference value >", "","INVISIBLE"});
 
             tmp = Value_Module_all[FIX__ + 33] * 256;
             tmp |= (Value_Module_all[FIX__ + 32] & 0xFF);
@@ -555,13 +555,13 @@ public class Network {
             al.add(new String[]{"LD Temperature  Reference", stringBuilder.toString()});
             stringBuilder.setLength(0);
 
-            al.add(new String[]{"<Module Information>", ""});
+            al.add(new String[]{"<Module Information>", "","INVISIBLE"});
 
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
             al.add(new String[]{"SW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            // Serial ¹øÈ£ Ç¥½Ã
+            // Serial ï¿½ï¿½È£ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[8];
                 System.arraycopy(Value_Module_all, (FIX__ + 6), tmpStr, 0, 8);
@@ -572,7 +572,7 @@ public class Network {
                 al.add(new String[]{"Serial Number", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("%d", tmp));
             {
@@ -585,7 +585,7 @@ public class Network {
             stringBuilder.append(String.format(".%d\n", tmp));
             al.add(new String[]{"HW Version", stringBuilder.toString()});
             stringBuilder.setLength(0);
-            // Model ¸í Ç¥½Ã
+            // Model ï¿½ï¿½ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, (FIX__ + 17), tmpStr, 0, 15);
@@ -763,7 +763,7 @@ public class Network {
             tmp = (Value_Module_all[FIX__ + 5] & 0xFF);
             stringBuilder.append(String.format("SW Version       :: %.1f\n",
                     (float) tmp / 10));
-            // Serial ¹øÈ£ Ç¥½Ã
+            // Serial ï¿½ï¿½È£ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[8];
                 System.arraycopy(Value_Module_all, (FIX__ + 6), tmpStr, 0, 8);
@@ -772,7 +772,7 @@ public class Network {
                 stringBuilder.append(String.valueOf(Str));
                 stringBuilder.append(String.format("\n"));
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("HW Version       :: %d", tmp));
             {
@@ -783,7 +783,7 @@ public class Network {
             }
             tmp = (Value_Module_all[FIX__ + 16] & 0xFF);
             stringBuilder.append(String.format(".%d\n", tmp));
-            // Model ¸í Ç¥½Ã
+            // Model ï¿½ï¿½ Ç¥ï¿½ï¿½
             {
                 byte[] tmpStr = new byte[15];
                 System.arraycopy(Value_Module_all, (FIX__ + 17), tmpStr, 0, 15);
@@ -815,15 +815,15 @@ public class Network {
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"< Alarm List>", ""});
+            al.add(new String[]{"< Alarm List>", "","INVISIBLE"});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                al.add(new String[]{"Input Power\n", ""});
+                al.add(new String[]{"Input Power\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                al.add(new String[]{"Output Power\n", ""});
+                al.add(new String[]{"Output Power\n", "","INVISIBLE"});
             }
-            al.add(new String[]{"< Status >", ""});
+            al.add(new String[]{"< Status >", "","INVISIBLE"});
 
             tmp = Value_Module_all[STAT_ + 8] * 256;
             tmp |= (Value_Module_all[STAT_ + 7] & 0xFF);
@@ -853,7 +853,7 @@ public class Network {
             } else {
                 al.add(new String[]{"Output Power Alarm", "Disable"});
             }
-            al.add(new String[]{"<Module Information>",""});
+            al.add(new String[]{"<Module Information>","","INVISIBLE"});
             tmp = (Value_Module_all[5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
             al.add(new String[]{"SW Version", stringBuilder.toString()});
@@ -867,7 +867,7 @@ public class Network {
                 al.add(new String[]{"\nSerial Numbe\n", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("%d", tmp));
 
@@ -912,24 +912,24 @@ public class Network {
         final StringBuilder stringBuilder = new StringBuilder(2048); // data.length);
 
         if (moduledata_RecieveCheck(data) == false) {
-            DeviceControlActivity.mtv_ModName.setText("FTX Module");
+            DeviceControlActivity.mtv_ModName.setText("OTX Module");
             return;
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"< Alarm List>\n", ""});
+            al.add(new String[]{"< Alarm List>\n", "","INVISIBLE"});
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
-                al.add(new String[]{"Opt Output Power\n",""});
+                al.add(new String[]{"Opt Output Power\n","","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 1)) == (0x0001 << 1)) {
-                al.add(new String[]{"LASER Temperature\n", ""});
+                al.add(new String[]{"LASER Temperature\n", "","INVISIBLE"});
             }
             if ((tmp & (0x0001 << 2)) == (0x0001 << 2)) {
-                al.add(new String[]{"RF Input Power\n", ""});
+                al.add(new String[]{"RF Input Power\n", "","INVISIBLE"});
             }
 
-            al.add(new String[]{"< Status >", ""});
+            al.add(new String[]{"< Status >", "","INVISIBLE"});
 
             if (Value_Module_all[STAT_ + 8] == 0x31) {
                 al.add(new String[]{"RF Mode Status", "MGC"});
@@ -1023,7 +1023,7 @@ public class Network {
             } else {
                 al.add(new String[]{"RF Input Power Alarm", "Disable"});
             }
-            al.add(new String[]{"\n<Module Information>\n", ""});
+            al.add(new String[]{"\n<Module Information>\n", "","INVISIBLE"});
             tmp = (Value_Module_all[5] & 0xFF);
             stringBuilder.append(String.format("%.1f\n", (float) tmp / 10));
             al.add(new String[]{"SW Version", stringBuilder.toString()});
@@ -1037,7 +1037,7 @@ public class Network {
                 al.add(new String[]{"Serial Number", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("%d", tmp));
             {
@@ -1086,7 +1086,7 @@ public class Network {
         } else {
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"< Alarm List >\n", ""});
+            al.add(new String[]{"< Alarm List >\n", "","INVISIBLE"});
 
             tmp = ((Value_Module_all[STAT_ + 4] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 3] & 0xFF));
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
@@ -1116,7 +1116,7 @@ public class Network {
             if ((tmp & (0x0001 << 8)) == (0x0001 << 8)) {
                 al.add(new String[]{"OTX Alarm Status", "Raised"});
             }
-            al.add(new String[]{"< Status >", ""});
+            al.add(new String[]{"< Status >", "","INVISIBLE"});
 
             tmp = Value_Module_all[STAT_ + 9] * 256;
             tmp |= (Value_Module_all[STAT_ + 8] & 0xFF);
@@ -1166,7 +1166,7 @@ public class Network {
             tmp = Value_Module_all[STAT_ + 27] * 256;
             tmp |= (Value_Module_all[STAT_ + 26] & 0xFF);
             al.add(new String[]{"Module Temperature", String.format("%.1f `C\n", (float) tmp / 10).toString()});
-            al.add(new String[]{"< Install ORx Module >",""});
+            al.add(new String[]{"< Install ORx Module >","","INVISIBLE"});
             if ((Value_Module_all[STAT_ + 7] & (0x0001 << 0)) == (0x0001 << 0)) {
                 stringBuilder.append(String.format("ORx1  "));
             }
@@ -1197,7 +1197,7 @@ public class Network {
             if ((Value_Module_all[STAT_ + 7] & (0x00F0)) != (0x0000)) {
                 stringBuilder.append(String.format("\n"));
             }
-            al.add(new String[]{stringBuilder.toString(), ""});
+            al.add(new String[]{stringBuilder.toString(), "","INVISIBLE"});
             stringBuilder.setLength(0);
 
             tmp = ((Value_Module_all[STAT_ + 6] << 8 & 0xFF00) | (Value_Module_all[STAT_ + 5] & 0xFF));
@@ -1207,10 +1207,10 @@ public class Network {
                 al.add(new String[]{"OTX Alarm","Disable"});
             }
             //stringBuilder.append(String.format("ORX Alarm\n"));
-            al.add(new String[]{"ORX Alarm\n", ""});
+            al.add(new String[]{"ORX Alarm\n", "","INVISIBLE"});
 
             //stringBuilder.append(String.format("  Eable   ::"));
-            al.add(new String[]{"Enable\n",""});
+            al.add(new String[]{"Enable\n","","INVISIBLE"});
             if ((tmp & (0x0001 << 0)) == (0x0001 << 0)) {
                 stringBuilder.append(String.format(" ORx1"));
             }
@@ -1238,7 +1238,7 @@ public class Network {
             if ((tmp & (0x00FF)) == 0) {
                 stringBuilder.append(String.format("None"));
             }
-            al.add(new String[]{stringBuilder.toString(),""});
+            al.add(new String[]{stringBuilder.toString(),"","INVISIBLE"});
             stringBuilder.setLength(0);
             stringBuilder.append(String.format("Disable ::"));
             if ((tmp & (0x0001 << 0)) == 0) {
@@ -1269,9 +1269,9 @@ public class Network {
                 stringBuilder.append(String.format("None"));
             }
             stringBuilder.append(String.format("\n"));
-            al.add(new String[]{stringBuilder.toString(), ""});
+            al.add(new String[]{stringBuilder.toString(), "","INVISIBLE"});
             stringBuilder.setLength(0);
-            al.add(new String[]{"<Module Information>", ""});
+            al.add(new String[]{"<Module Information>", "","INVISIBLE"});
             tmp = (Value_Module_all[5] & 0xFF);
             al.add(new String[]{"SW Version", String.format("%.1f\n",(float)tmp/10).toString()});
             {
@@ -1284,7 +1284,7 @@ public class Network {
                 al.add(new String[]{"Serial Numbe", stringBuilder.toString()});
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
             stringBuilder.append(String.format("%d", tmp));
             {
@@ -1334,7 +1334,7 @@ public class Network {
             //stringBuilder.append(String.format("Receiving Data...\n"));
             al.clear();
             adapter.notifyDataSetChanged();
-            al.add(new String[]{"RF Amp Module", ""});
+            al.add(new String[]{"RF Amp Module", "","INVISIBLE"});
             return;
         }
         //mDataFieldRx.setText(stringBuilder.toString());
@@ -1351,7 +1351,7 @@ public class Network {
             al.clear();
             adapter.notifyDataSetChanged();
             tmp = (Value_Module_all[5] & 0xFF);
-            al.add(new String[]{"<Module Information>", ""});
+            al.add(new String[]{"<Module Information>", "","INVISIBLE"});
 
             stringBuilder.setLength(0);
 
@@ -1366,9 +1366,9 @@ public class Network {
 
                 stringBuilder.setLength(0);
             }
-            // Hw version Ç¥½Ã
+            // Hw version Ç¥ï¿½ï¿½
             tmp = (Value_Module_all[FIX__ + 14] & 0xFF);
-            stringBuilder.append("" + tmp);
+            stringBuilder.append(""+ tmp);
 
             byte[] tmpStr1 = new byte[1];
             System.arraycopy(Value_Module_all, (FIX__ + 15), tmpStr1, 0, 1);
