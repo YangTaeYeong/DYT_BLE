@@ -20,7 +20,7 @@ class MyAdapter extends BaseAdapter {
     ArrayList <String[]>  al;
     LayoutInflater inf;
 
-
+//
     public MyAdapter(Context context, int layout, ArrayList al) {
         this.context = context;
         this.layout = layout;
