@@ -350,9 +350,10 @@ public class DeviceControlActivity extends Activity implements OnClickListener, 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // parent는 AdapterView의 속성의 모두 사용 할 수 있다.
-        String tv = (String)parent.getAdapter().getItem(position);
-        Toast.makeText(getApplicationContext(), tv, Toast.LENGTH_SHORT).show();
-
-
+        if(parent.getAdapter().getItem(position).equals("")){
+            String tv = (String)parent.getAdapter().getItem(position);
+            Toast.makeText(getApplicationContext(), tv, Toast.LENGTH_SHORT).show();
+        }
     }
 }
+

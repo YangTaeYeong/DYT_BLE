@@ -20,11 +20,9 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:background="#FFFFFF"
-        android:textColor="#AA0000FF"
-        android:textSize="18sp"
-        android:autoText="true"
-        android:textStyle="bold"
-        android:text="Large Text"/>
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
 
     <Button
         android:layout_width="0dp"
